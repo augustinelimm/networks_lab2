@@ -48,9 +48,9 @@ with httpx.Client() as client:
     print_response(response, "GET", BASE_URL)
 
     # Test GET for specific id
-    response = client.get(f"{BASE_URL}/100000")
+    response = client.get(f"{BASE_URL}/237922")
     print_response(response, "GET", BASE_URL)
-    response = client.get(f"{BASE_URL}/100000")
+    response = client.get(f"{BASE_URL}/237922")
     print_response(response, "GET", BASE_URL)
 
     # Test GET request with sortBy query parameter (sorting by stock)
@@ -112,5 +112,5 @@ with httpx.Client() as client:
     print_response(response, "DELETE", f"{BASE_URL}/items")
 
     # Test invalid DELETE request (deleting a non-existent item)
-    response = client.delete(f"{BASE_URL}/187654")
+    response = client.delete(f"{BASE_URL}/234123")
     print_response(response, "DELETE (Invalid Request)", f"{BASE_URL}/187654")

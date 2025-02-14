@@ -1,7 +1,7 @@
 POST http://127.0.0.1:8000/items HTTP/1.1
 Content-Type: application/json
 
-# with no id specified
+# with no id specified, item will still be created
 {
     "name": "Short Sleeve Shirt",
     "stock": 25

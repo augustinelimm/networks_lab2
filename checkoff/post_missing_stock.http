@@ -1,7 +1,7 @@
 POST http://127.0.0.1:8000/items HTTP/1.1
 Content-Type: application/json
 
-# with id specified
+# item will not be created, as both name and stock must be provided
 {
     "name": "Long Sleeve Shirt"
 }
