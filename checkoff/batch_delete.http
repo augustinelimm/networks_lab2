@@ -1,0 +1,7 @@
+DELETE http://127.0.0.1:8000/items/batch-delete/
+Content-Type: application/json
+
+{
+    "item_ids": [100000, 101836, 111023]
+}
+

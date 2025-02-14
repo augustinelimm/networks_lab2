@@ -77,34 +77,33 @@ uvicorn main:app --reload
  ### POST Requests
 
  - POST /items - Add a new item
- - POST /uploadfile/ - Upload a file (multipart/form-data)
 
- Example:
 ```
 curl -X POST "http://127.0.0.1:8000/items" \
      -H "Content-Type: application/json" \
      -d '{"name": "Oversized T-Shirt", "stock": 200}'
 ```
+
 ### PUT Requests
 
 - PUT /items/{id} - Update an existing item
-Example:
+
 ```
 curl -X PUT "http://127.0.0.1:8000/items/156442" \
      -H "Content-Type: application/json" \
      -d '{"id": "156442", "name": "Long Sleeve T-Shirt", "stock": 181}'
 ```
+
 ### DELETE Requests
 
 - DELETE /items/{id} - Delete an item by ID
-Example:
+
 ```
 curl -X DELETE "http://127.0.0.1:8000/items/187654"
 ```
 
 ### Batch DELETE
 
-example
 ```
 curl -X DELETE "http://127.0.0.1:8000/items/batch-delete/" \
      -H "Content-Type: application/json" \
