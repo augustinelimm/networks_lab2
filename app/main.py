@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 import os
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 import shutil 
 
 class ItemCreate(BaseModel):
@@ -50,7 +50,7 @@ GET REQUEST
 def read_root():
     return {
         "message": "Welcome! You can use this API to check clothing stock.",
-        "Challenges": {"File upload in a POST request, using multipart/form-data",
+        "Challenges": {"A special route that can perform batch delete",
                        "Authorisation through inspecting request header for DELETE request"
         },
         "Note": {
@@ -163,23 +163,23 @@ def update_item(item_id: int, item_update: ItemUpdate, db: Session = Depends(get
     return {"id": item.id, "name": item.name, "stock": item.stock}
 
 '''
-FILE UPLOAD
+BATCH DELETE
 '''
-@app.post("/uploadfile/")
-async def upload_file(file: UploadFile = File(...)):
-    save_directory = "uploads/"
-    os.makedirs(save_directory, exist_ok=True)
+class BatchDeleteRequest(BaseModel):
+    item_ids: List[int]
 
-    file_path = os.path.join(save_directory, file.filename)
+@app.delete("/items/batch-delete/")
+def batch_delete(request: BatchDeleteRequest, db: Session = Depends(get_db)):
+    deleted_count = 0
 
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    for item_id in request.item_ids:
+        item = db.query(Item).filter(Item.id == item_id).first()
+        if item:
+            db.delete(item)
+            deleted_count += 1
 
-    return {
-        "status": "success",
-        "message": f"File '{file.filename}' uploaded successfully.",
-        "file_path": file_path
-    }
+    db.commit()
+    return {"message": f"{deleted_count} items deleted successfully"}
 
 '''
 AUTHORIZATION TO DELETE
