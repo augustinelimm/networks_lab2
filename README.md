@@ -20,11 +20,31 @@ This project uses Docker for deployment. Follow these steps:
 git clone https://github.com/augustinelimm/networks_lab2.git
 
 ```
-2. Run the API using Docker
+
+2. Create a .env file
+This application uses a MySQL database to store data. The init.sql file will automatically execute SQL commands to initialize the database with predefined data. Replace placeholders with MySQL credentials to allow the application to connect to MySQL.
+For Mac/Linux users
+```sh
+touch .env
+```
+For Windows
+```
+echo > .env
+```
+```
+DATABASE_URL=mysql+pymysql://<your_username>:<your_password>@db/items_db
+ADMIN_PASSWORD=<your_admin_password>
+MYSQL_ROOT_PASSWORD=<your_sql_root_password>
+MYSQL_DATABASE=items_db
+MYSQL_USER=<your_mysql_user>
+MYSQL_PASSWORD=<your_mysql_password>
+```
+
+3. Run the API using Docker
 ```sh
 docker-compose up --build
 ```
-3. (Optional) If running locally without Docker
+4. (Optional) If running locally without Docker
 ```sh
 pip install -r requirements.txt
 ```
