@@ -20,31 +20,11 @@ This project uses Docker for deployment. Follow these steps:
 git clone https://github.com/augustinelimm/networks_lab2.git
 
 ```
-
-2. Create a .env file
-This application uses a MySQL database to store data. The init.sql file will automatically execute SQL commands to initialize the database with predefined data. Replace placeholders with MySQL credentials to allow the application to connect to MySQL.
-For Mac/Linux users
-```sh
-touch .env
-```
-For Windows
-```
-echo > .env
-```
-```
-DATABASE_URL=mysql+pymysql://<your_username>:<your_password>@db/items_db
-ADMIN_PASSWORD=<your_admin_password>
-MYSQL_ROOT_PASSWORD=<your_sql_root_password>
-MYSQL_DATABASE=items_db
-MYSQL_USER=<your_mysql_user>
-MYSQL_PASSWORD=<your_mysql_password>
-```
-
-3. Run the API using Docker
+2. Run the API using Docker
 ```sh
 docker-compose up --build
 ```
-4. (Optional) If running locally without Docker
+3. (Optional) If running locally without Docker
 ```sh
 pip install -r requirements.txt
 ```
@@ -116,18 +96,18 @@ curl -X DELETE "http://127.0.0.1:8000/admin/items/234222" \
      -H "Authorization: {password}"
 ```
 
-## Idempotency Test
+## Idempotent or Non-Idempotent routes
 
-- GET/items
-- GET/items/{id}
-- GET/items/items?sortBy={id/name/stock}
-- GET/items/items?count={int}
-- GET/items/items?sortBy={id/name/stock}&count={int} requests are idempotent because calling it many times doesn't change any data
+These routes should always produce the same result no matter how often it is called.
 
-- POST/items{id} requests are not idempotent because requesting this many times will result in duplications with different id. Since id is auto incremented
-- DELETE/items/{id} requests are not idempotent because the item does not exists.
-
-Prove: After running test_api.py, you will see that every GET request results in the same output. Hence, all GET requests are idempotent. Omitting POST 'Invalid Request', adding new_item = {"id": 187654, "name": "Slim Fit Hoodie", "stock": 150} the first time indicates item is successfully created. The second time around, a validation error is thrown stating that item with ID 187654 already exists. This shows that POST requests are not idempotent because it does not add it to the database after the first request is done. Deleting ID 187654 the first time shows that it is successful, subsequent DELETE requests of the same item will indicate that item with ID 187654 is not found, meaning it has been successfully deleted the first time. Hence, DELETE requests are also not idempotent because subsequent DELETE request after the first does not perform deletion again.
+| Route | Method | Idempotent? | Reason|
+|-------|--------|--------------|------|
+|GET /items/ | GET |Yes|Always returns the same items unless modified by another request|
+|GET /items/{id}|GET|Yes|Always returns the same items unless modified by another request|
+|DELETE /items/batch-delete|DELETE|Yes|If there are no items in the database, repeated request will be the same as requesting it once|
+|DELETE /items/{id}|DELETE|Yes|If there are no items in the database, repeated request will be the same as requesting it once|
+|POST /items/|POST|No|Each request creates a new item|
+|PUT /items/{id}|PUT|No|	Updates a item's details, modifying the database.|
 
 ## Testing with .http files
 

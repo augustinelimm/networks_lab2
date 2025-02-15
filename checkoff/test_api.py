@@ -18,8 +18,8 @@ TEST CASES are run twice to test for idempotency.
     the first time indicates item is successfully created. The second time around, a validation error is thrown stating that item \
     with ID 187654 already exists. This shows that POST requests are not idempotent because it does not add it to the database after \
     the first request is done. Finally, deleting ID 187654 the first time shows that it is successful, subsequent DELETE requests of \
-    the same item will indicate that item with ID 187654 is not found, meaning it has been successfully deleted the first time. Hence, \
-    DELETE requests are also not idempotent because subsequent DELETE request after the first does not perform deletion again.
+    the same item will indicate that item with ID 187654 is not found, meaning it has been successfully deleted the first time and \
+    subsequent DELETE requests will result in the same outcome. Hence, DELETE requests are idempotent.
 '''
 
 import httpx
